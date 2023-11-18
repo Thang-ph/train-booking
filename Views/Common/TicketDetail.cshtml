@@ -1,0 +1,66 @@
+﻿@model PRN211_Project_Group_4.Models.Booking
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .ticket-info {
+            border: 2px solid #333;
+            padding: 20px;
+            background-color: #fff;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .ticket-info p {
+                margin: 10px 0;
+            }
+
+            .ticket-info .highlight {
+                font-weight: bold;
+                color: #007bff;
+            }
+
+            .ticket-info img {
+                max-width: 100%;
+                height: auto;
+            }
+    </style>
+</head>
+<body>
+    <h1>Ticket Detail</h1>
+
+    @if (Model != null)
+    {
+        <div class="ticket-info">
+            <p><span class="highlight">Booking ID:</span> @Model.BookId</p>
+            <p><span class="highlight">Trip ID:</span> @Model.TripId</p>
+            <p><span class="highlight">Train Name:</span> @Model.Trip.Train.Name</p>
+            <p><span class="highlight">Start Station:</span> @Model.Trip.Route.Start.Location1</p>
+            <p><span class="highlight">End Station:</span> @Model.Trip.Route.End.Location1</p>
+            <p><span class="highlight">Slot:</span> @Model.Trip.Slot</p>
+            <p><span class="highlight">Type:</span> @Model.Trip.Train.Type.Type1</p>
+            <p><span class="highlight">AccountID:</span> @Model.Account.AccountId</p>
+        </div>
+    }
+    else
+    {
+        <p>No booking found.</p>
+    }
+</body>
+</html>

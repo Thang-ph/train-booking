@@ -1,0 +1,51 @@
+﻿@{
+    var tripId = ViewData["tripId"];
+    var trainId = ViewData["trainId"];
+}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>
+                <button onclick="redirectToBookSeat(1, @tripId, @trainId)">
+                    Wagon 1
+                </button>
+            </td>
+            <td>
+                <button onclick="redirectToBookSeat(2, @tripId, @trainId)">
+                    Wagon 2
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="redirectToBookSeat(3, @tripId, @trainId)">
+                    Wagon 3
+                </button>
+            </td>
+            <td>
+                <button onclick="redirectToBookSeat(4, @tripId, @trainId)">
+                    Wagon 4
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="redirectToBookSeat(5, @tripId, @trainId)">
+                    Wagon 5
+                </button>
+            </td>
+            <td>
+                <button onclick="redirectToBookSeat(6, @tripId, @trainId)">
+                    Wagon 6
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function redirectToBookSeat(wagonId, tripId, trainId) {
+        window.location.href = `/Common/BookSeat?WagonId=${wagonId}&TripId=${tripId}&TrainId=${trainId}`;
+    }
+</script>

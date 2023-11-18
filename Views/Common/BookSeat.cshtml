@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "BookSeat";
+    string seatStatus = (string) ViewData["seatStatus"];
+    int WagonId = (int)ViewData["WagonId"];
+    int TripId = (int)ViewData["TripId"];
+    int TrainId = (int)ViewData["TrainId"];
+    int count = 0;
+}
+<a href="/"><button class="btn btn-outline-dark">Back</button></a>
+<div style="display: flex; justify-content: center;">
+    <h1>BookSeat</h1>
+</div>
+<div class="row">
+    <div class="col-12 
+-wrapper">
+        <table class="table table-bordered" id="wagon">
+            <tbody style="padding: 20px;">
+                @for (int j = 1; j <= 4; j++)
+                {
+                    <tr>
+                        @for (int i = 1; i <= 12; i++)
+                        {
+
+                            <td>
+                                @if (seatStatus.Length > 0 && seatStatus[count].Equals('1'))
+                                {
+                                    <div id="@count" class="square choosen disabled" onclick="changeColor(this)" style="cursor: pointer">
+                                        <div style="position: absolute;">@(count + 1) </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="@count" class="square unchoosen" onclick="changeColor(this)" style="cursor: pointer">
+                                        <div style="position: absolute;">@(count + 1)</div>
+                                    </div>
+                                }
+                            </td>
+                            if (i % 4 != 0 || i == 12)
+                            {
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            count++;
+                        }
+                    </tr>
+                    if (j == 2)
+                    {
+                        <tr><td></td></tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <button class="btn btn-success" onclick="bookSeats()">Booking</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var selectedSeats = [];
+    function changeColor(element) {
+        var seatIndex = element.id;
+        var seatIndexPosition = selectedSeats.indexOf(seatIndex);
+        if (!element.classList.contains("disabled")) {
+            if (seatIndexPosition === -1) {
+                selectedSeats.push(seatIndex);
+                element.classList.remove("unchoosen")
+                element.classList.add("choosen")
+            } else {
+                selectedSeats.splice(seatIndexPosition, 1);
+                element.classList.add("unchoosen")
+                element.classList.remove("choosen")
+            }
+        }
+    }
+    function bookSeats() {
+        const temp = [];
+        for (let index = 0; index < 48; index++) {
+            temp.push('0');
+        }
+
+        for (let index = 0; index < selectedSeats.length; index++) {
+            temp[selectedSeats[index]] = '1';
+        }
+        let result = "";
+        for (let index = 0; index < temp.length; index++) {
+            result += temp[index];
+        }
+        $.ajax({
+            url: '@Url.Action("AddNewTicket")',
+            type: "POST",
+            data: { selectedSeat: @WagonId + result, tripId: @TripId, trainId: @TrainId },
+            success: function (result) {
+                window.location.href = `/Common/MyTicket`;
+            },
+            error: function (error) {
+                console.log("Error: " + error)
+            }
+        });
+        
+    }
+</script>
+
+<style>
+    .square {
+        width: 100%;
+        height: 50px;
+        background-color: lightblue;
+        border-radius: 10px;
+        margin: 5px;
+        position: relative;
+    }
+
+        .square::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 40%;
+            background-color: blueviolet;
+        }
+
+    .choosen {
+        background-color: lightgreen;
+    }
+
+    .unchoosen {
+        background-color: lightblue;
+    }
+
+    .wagon-wrapper {
+        background-color: #FFEBCD;
+        border-radius: 50px;
+        padding: 10px;
+    }
+
+    #wagon {
+        border-color: transparent;
+    }
+</style>

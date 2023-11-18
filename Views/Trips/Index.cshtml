@@ -1,0 +1,185 @@
+﻿@model IEnumerable<PRN211_Project_Group_4.Models.Trip>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Chỉnh kích thước và màu sắc cho nhãn và ô nhập liệu */
+        .form-group label.control-label {
+            color: #333; /* Màu chữ xám đậm */
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        input[type="submit"].btn-primary {
+            background-color: #007bff; /* Màu xanh của nút Bootstrap */
+            color: #fff; /* Màu chữ trắng */
+            border: none; /* Loại bỏ viền */
+        }
+
+        .col-md-4 {
+            margin-bottom: 10px; /* Khoảng cách dưới của cột */
+        }
+
+        input[type="date"] {
+            background-color: #f2f2f2; /* Màu xám nhạt */
+            border: 1px solid #ccc; /* Viền xám nhạt */
+        }
+        .table-row {
+            background-color: #f2f2f2; /* Màu xám nhạt */
+        }
+
+            .table-row.Avaiable {
+                background-color: #d9f0d0; /* Màu xanh lá cây nhạt */
+            }
+
+            .table-row.Sold-out {
+                background-color: #f0d9d9; /* Màu đỏ nhạt */
+            }
+
+            .table-row.No-information {
+                background-color: #f0f0d9; /* Màu vàng nhạt */
+            }
+    </style>
+
+
+</head>
+<body>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Index" method="post">
+                <div class="form-group">
+                    <label class="control-label">Date:</label>
+                    <input class="form-control" type="date" name="selectedDate" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Train:</label>
+                    <select class="form-control" name="selectedTrain">
+                        @foreach (var item in (SelectList)ViewData["Train"])
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Route:</label>
+                    <select class="form-control" name="selectedRoute">
+                        @foreach (var item in (SelectList)ViewData["Route"])
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Search" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <h1 class="page-title">Trips Schedule</h1>
+
+    <p>
+        <button> <a asp-action="Create">Create New</a> </button>
+    </p>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Slot)
+                </th>
+                <th>
+                    Train Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    Start
+                </th>
+                <th>
+                    End
+                </th>
+
+                <th>
+                    Type
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string statusMessage = item.Status.HasValue ? (item.Status.Value ? "Avaiable" : "Sold-out") : "No-information";
+                <tr class="table-row @statusMessage ">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slot)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Train.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                      
+                        @Html.DisplayFor(modelItem => statusMessage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route.Start.Location1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route.End.Location1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Train.Type.Type1)
+                    </td>
+                   
+                    <td>
+                        @{
+                            Account a = new Account();
+                            int role = 0;
+                            if (a.GetRoleStatus) role = 1;
+                            if (!a.GetAccountStatus) role = -1;
+                        }
+
+                        @{
+                            if(role == 1)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.TripId">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.TripId"> Details </a>
+                                <a asp-action="Delete" asp-route-id="@item.TripId"> Delete </a>
+                        <a asp-controller="Common" asp-action="Index" asp-route-tripId="@item.TripId" asp-route-trainId="@item.TrainId">Booking</a>
+
+                            }
+                            else
+                                if (role == 0)
+                            {
+                                <a asp-controller="Common" asp-action="Index" asp-route-tripId="@item.TripId" asp-route-trainId="@item.TrainId">Booking</a>
+
+                            }
+                        }
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

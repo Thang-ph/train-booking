@@ -1,0 +1,74 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using PRN211_Project_Group_4.Models
+@model Account;
+<style>
+    /* Container form styles */
+    form {
+        width: 300px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Title (h1) styles */
+    h1 {
+        text-align: center;
+        font-size: 24px;
+        color: #333;
+    }
+
+    /* Error message styles */
+    h3 {
+        color: red;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    /* Label and input field styles */
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    /* Submit button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+
+        /* Submit button hover styles */
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+    .login-form {
+        text-align: center; /* Để căn giữa nội dung trong form */
+        margin-bottom: 20px; /* Khoảng cách giữa form và thẻ "Register" */
+    }
+
+    /* Hyperlink styles for "Register" */
+    .register-link {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+    }
+</style>
+<h1>Login</h1>
+<h3 style="color: red;">@ViewBag.Error</h3>
+<form asp-controller="Home" asp-action="Login" method="post">
+    Username <input asp-for="Username" type="text" /><br />
+    Password: <input asp-for="Password" type="text" /><br />
+    <input type="submit" value="login"></input>
+</form>
+<a asp-controller="Home" asp-action="Register" class="register-link">Register</a>

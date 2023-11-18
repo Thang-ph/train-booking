@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "My ticket";
+    List<Booking> myTicket = (List<Booking>)ViewData["myTicket"];
+    List<Trip> myTrips = (List<Trip>)ViewData["myTrips"];
+}
+
+<a href="/"><button class="btn btn-outline-dark">Back</button></a>
+
+<div style="display: flex; justify-content: center;">
+    <h1>My ticket</h1>
+</div>
+<div id="wrapper">
+    <table class="table table-bordered" id="table--ticket">
+        <thead>
+            <tr>
+                <th scope="col">Train Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">From -> To</th>
+                <th scope="col">Slot</th>
+                <th scope="col" width="200px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Booking item in myTicket)
+            {
+                <tr class="train--row not--yet">
+                    <th scope="row">@item.Trip.Train.Name</th>
+                    <td>@item.Trip.Date.ToString().Substring(0,10)</td>
+                    <td>@item.Trip.Route.Start.Location1 -> @item.Trip.Route.End.Location1</td>
+                    <td>@item.Trip.Slot</td>
+                    <td class="train--action">
+                        <div style="display:flex; justify-content: flex-end">
+                            <a class="btn btn-warning" href="ticketdetail?id=@item.BookId">See details</a>
+                            <button class="btn btn-danger delete-btn" id="@item.TripId">Delete</button>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+    #wrapper {
+        border: black 2px solid;
+        padding: 5px;
+    }
+
+    #table--ticket {
+        border-color: transparent;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    thead {
+        text-align: center;
+    }
+
+    .train--row td {
+        background-color: lightgreen;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .train--row {
+        text-align: center;
+    }
+
+        .train--row th {
+            border-radius: 10px;
+        }
+
+    .cancel th,
+    .cancel td {
+        background-color: indianred;
+        border: 1px brown solid;
+    }
+
+    .not--yet th,
+    .not--yet td {
+        background-color: lightgreen;
+        border: 1px green solid;
+    }
+
+    .train--row .train--action {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+    }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".delete-btn").on("click", function () {
+            var tripId = $(this).attr("id");
+            var row = $(this).closest("tr");
+            $.ajax({
+                url: '@Url.Action("DeleteTrip")',
+                type: "POST",
+                data: { tripId: tripId },
+                success: function (result) {
+                    row.remove();
+                },
+                error: function (error) {
+                    console.log("Error: " + error)
+                }
+            });
+        });
+    });
+</script>

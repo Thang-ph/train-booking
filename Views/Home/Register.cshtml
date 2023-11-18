@@ -1,0 +1,55 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using PRN211_Project_Group_4.Models
+@model Account;
+<style>
+    /* Container form styles */
+    form {
+        width: 300px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Error message styles */
+    h3 {
+        color: red;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    /* Label and input field styles */
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    /* Submit button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+
+        /* Submit button hover styles */
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+</style>
+<h3>@ViewBag.Mes</h3>
+<form asp-controller="Home" asp-action="Register" method="post">
+    <input asp-for="Role" type="hidden" value="0" /><br />
+    UserName: <input asp-for="Username" type="text" /><br />
+    Password: <input asp-for="Password" type="text" /><br />
+    Confirm: <input name="Confirm" type="text" /><br />
+    <input type="submit" value="Register"></input>
+</form>

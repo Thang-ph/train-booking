@@ -1,0 +1,77 @@
+﻿@model PRN211_Project_Group_4.Models.Trip
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Trip</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Slot" class="control-label"></label>
+                <select asp-for="Slot" class="form-control" asp-items="ViewBag.Slot"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrainId" class="control-label"></label>
+                <select asp-for="TrainId" class="form-control" asp-items="ViewBag.Train"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input type="date" asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RouteId" class="control-label"></label>
+                <select asp-for="RouteId" class="form-control" asp-items="ViewBag.Route"></select>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        $(document).ready(function () {
+            $('#TrainId, #RouteId, #Date').change(function () {
+                var trainId = $('#TrainId').val();
+                var routeId = $('#RouteId').val();
+                var date = $('#Date').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Trips/GetAvailableSlots")',
+                    data: { trainId: trainId, routeId: routeId, date: date },
+                    success: function (data) {
+                        var selectList = $('#Slot');
+                        selectList.empty();
+                        $.each(data, function (index, item) {
+                            selectList.append($('<option></option>').val(item).html(item));
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}
